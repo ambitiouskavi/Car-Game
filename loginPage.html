@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-weight: bold;
+      font-size: large;
+      box-sizing: border-box;
+
+    }
+    body{
+            background-color:#FFADBC;
+        }
+
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+
+  <form class="login">
+    <p style="margin-bottom:3vh" class="error"></p>
+    <input style="margin-bottom:3vh" type="text" id="userName" placeholder="UserName" required>
+    <input style="margin-bottom:3vh" type="password" id="password" placeholder="password" required>
+    <button style="margin-bottom:3vh" type="submit" id="submitBtn">Login</button>
+  </form>
+
+  <script>
+    let loginPage = document.querySelector(".login");
+    let username = document.querySelector("#userName");
+    let password = document.querySelector("#password");
+    let error = document.querySelector(".error")
+    let data;
+    loginPage.addEventListener("submit", validateUser)
+    function validateUser() {
+      event.preventDefault();
+      data = JSON.parse(localStorage.getItem('data'));
+      let userName = username.value;
+      let Pass = password.value;
+      let result = checkLogin(userName, Pass);
+      if (result === "Login Successful") {
+        error.innerHTML = "Login Successful"
+        localStorage.setItem('currentUserLoggedIn',userName)
+        window.location.href = "index.html";
+      }
+      else if (result === "Incorrect Password") {
+        error.innerHTML = "Incorrect Password";
+      }
+      else if (result === "UserName does not exists") {
+        error.innerHTML = "UserName does not exists";
+      }
+    }
+
+
+    function checkLogin(userName, Pass) {
+      for (let t of data) {
+        let flag = 0;
+        if (t.UserName == userName) {
+          if (t.Password == Pass) {
+            return "Login Successful";
+          }
+          else {
+            return "Incorrect Password"
+          }
+          flag = 1;
+        }
+        else {
+          return "UserName does not exists"
+        }
+
+      }
+      return false;
+
+    }
+
+  </script>
+</body>
+
+</html>
